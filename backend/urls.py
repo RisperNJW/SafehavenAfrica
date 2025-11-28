@@ -22,6 +22,7 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
     path('api/reports/', include('reports.urls')),
     path('api/risk/', include('risk.urls')),
+    path('api/moderation/', include('moderation.urls')),
 ]
 
 # Serve media files during development

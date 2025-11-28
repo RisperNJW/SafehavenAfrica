@@ -141,6 +141,8 @@ CORS_ALLOWED_ORIGINS = [
 # Allow credentials (for JWT in cookies later if needed)
 CORS_ALLOW_CREDENTIALS = True
 
+OPENAI_API_KEY = config('OPENAI_API_KEY', default='')  # put your key in .env
+
 # Security Headers (Hackathon → Production Ready)
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True

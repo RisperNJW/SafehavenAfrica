@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/reports/', include('reports.urls')),
     path('api/risk/', include('risk.urls')),
     path('api/moderation/', include('moderation.urls')),
+    path('api/chatbot/', include('chatbot.urls')),
 ]
 
 # Serve media files during development

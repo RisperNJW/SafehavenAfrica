@@ -1,4 +1,4 @@
-
+// support
 import React, { useState, useEffect } from 'react';
 import { Heart, DollarSign, HandHelping, Lock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { User, DonationRequest } from '../types';

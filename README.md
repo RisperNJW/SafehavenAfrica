@@ -59,8 +59,8 @@ Physical abuse, emotional abuse, financial abuse, harassment, etc.
 
 🧰 Technology Stack
 Frontend (React)
-•	React + Vite / CRA
-•	TypeScript (if applicable)
+•	React + Vite 
+•	TypeScript 
 •	Redux / Context API
 •	Axios
 •	TailwindCSS / Styled Components
@@ -86,7 +86,7 @@ Frontend (React)
      ↓ REST API Calls
 Backend (Django REST Framework)
      ↓
-Database (PostgreSQL)
+Database 
      ↓
 Blockchain Network (Smart Contracts)
      ↓

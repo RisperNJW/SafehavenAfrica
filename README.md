@@ -20,6 +20,14 @@ The system integrates React, Django, Blockchain, and AI-driven chat assistance t
 •	Contributing
 •	License
 
+
+## The app live
+
+[live](https://safehave.netlify.app/)
+
+
+
+
 📖 About SafeHaven
 SafeHaven is built to provide a confidential, secure, and accessible support system for individuals experiencing GBV. The platform aims to bridge the gap between victims, advocates, counselors, and donors using modern technology such as blockchain for transparency, AI for real-time guidance, and cloud-based reporting workflows.
 The platform prioritizes:
@@ -217,5 +225,5 @@ This project is licensed under the MIT License.
 You are free to use, copy, and modify it with proper Attribution.
 
 
-[live](https://safehave.netlify.app/)
+
 

@@ -1,111 +1,69 @@
-
-import React, { useState, useEffect } from 'react';
-import { Layout } from './components/Layout';
-import { Landing, About, Learn } from './pages/Views';
-import { Blog } from './pages/Blog';
-import { Support } from './pages/Support';
-import { UserDashboard } from './components/UserDashboard';
-import { ReportModal } from './components/ReportModal';
+// src/App.tsx
+import { useState, useEffect } from 'react';
 import { AuthModal } from './components/AuthModal';
-import { PageView, User } from './types';
+import HomeDashboard from './pages/HomeDashboard';
+import { authAPI } from '../client_side/src/api/auth';
+import type { User } from './types';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageView>('landing');
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check local storage for theme
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-       setIsDarkMode(true);
-    }
-    
-    // Check local storage for user session
-    const storedUser = localStorage.getItem('safehaven_user');
-    if (storedUser) {
-        setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('access_token');
+
+    if (token) {
+      authAPI
+        .me()
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch(() => {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
-
   const handleLogin = (newUser: User) => {
-      setUser(newUser);
-      localStorage.setItem('safehaven_user', JSON.stringify(newUser));
+    setUser(newUser);
   };
 
   const handleLogout = () => {
-      setUser(null);
-      localStorage.removeItem('safehaven_user');
-      if (currentPage === 'dashboard' || currentPage === 'admin') {
-          setCurrentPage('landing');
-      }
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    setUser(null);
   };
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'landing':
-        return (
-          <Landing 
-            onNavigate={setCurrentPage} 
-            onOpenReport={() => setIsReportModalOpen(true)} 
-          />
-        );
-      case 'about':
-        return <About />;
-      case 'blog':
-        return <Blog currentUser={user} />;
-      case 'support':
-        return <Support currentUser={user} onOpenAuth={() => setIsAuthModalOpen(true)} />;
-      case 'learn':
-        return <Learn />;
-      case 'dashboard':
-        return <UserDashboard currentUser={user} />;
-      default:
-        return (
-          <Landing 
-            onNavigate={setCurrentPage} 
-            onOpenReport={() => setIsReportModalOpen(true)} 
-          />
-        );
-    }
-  };
+  // Loading Screen
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-rose-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+          <h2 className="text-3xl font-bold text-white">SafeSpace</h2>
+          <p className="text-white mt-4">Loading your safe space...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
-      <Layout 
-        currentPage={currentPage} 
-        onNavigate={setCurrentPage}
-        isDarkMode={isDarkMode}
-        toggleTheme={toggleTheme}
-        currentUser={user}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onLogout={handleLogout}
-      >
-        {renderPage()}
-      </Layout>
-      
-      <ReportModal 
-        isOpen={isReportModalOpen} 
-        onClose={() => setIsReportModalOpen(false)} 
-        currentUser={user}
-      />
-
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLogin={handleLogin}
-      />
+      {user ? (
+        <HomeDashboard user={user} onLogout={handleLogout} />
+      ) : (
+        <AuthModal
+          isOpen={true}
+          onClose={() => {}}
+          onLogin={handleLogin}
+        />
+      )}
     </>
   );
 }

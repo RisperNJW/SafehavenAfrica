@@ -59,8 +59,8 @@ Physical abuse, emotional abuse, financial abuse, harassment, etc.
 
 🧰 Technology Stack
 Frontend (React)
-•	React + Vite / CRA
-•	TypeScript (if applicable)
+•	React + Vite 
+•	TypeScript 
 •	Redux / Context API
 •	Axios
 •	TailwindCSS / Styled Components
@@ -86,7 +86,7 @@ Frontend (React)
      ↓ REST API Calls
 Backend (Django REST Framework)
      ↓
-Database (PostgreSQL)
+Database 
      ↓
 Blockchain Network (Smart Contracts)
      ↓
@@ -202,7 +202,8 @@ Planned Features
 •	Geo-location based emergency routing
 •	Offline mode for low-network regions
 •	Automatic safety alerts feature
-________________________________________
+____________________________________
+.donation to victims____
 🤝 Contributing
 We welcome contributions!
 To contribute:

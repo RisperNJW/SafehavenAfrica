@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from rest_framework import viewsets, status, permissions, filters
 from rest_framework.response import Response
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Report, Evidence
 from .serializers import ReportSerializer, ReportCreateSerializer, EvidenceSerializer
@@ -20,7 +20,7 @@ class ReportViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
-        if self.request.user.role == 'admin':
+        if hasattr(self.request.user, 'role') and self.request.user.role == 'admin':
             return self.queryset.all()
         return self.queryset.filter(survivor=self.request.user)
 
@@ -57,7 +57,7 @@ class ReportViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        MAX_FILE_SIZE = 10 * 1024 * 1024 
+        MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
         ALLOWED_TYPES = [
             'image/jpeg', 'image/png', 'image/gif',
             'application/pdf',
@@ -73,7 +73,6 @@ class ReportViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
                 
-            size
             if file.size > MAX_FILE_SIZE:
                 return Response(
                     {"error": f"File {file.name} is too large. Max size is 10MB"},
@@ -98,15 +97,16 @@ class ReportViewSet(viewsets.ModelViewSet):
         return sha256_hash.hexdigest()
     
     def _send_report_created_notification(self, report):
-       
+        # TODO: Implement actual notification logic
         pass
 
-    @action(detail=True, methods=['delete'])
-    @permission_classes([IsReporterOrReadOnly])
+    @action(
+        detail=True,
+        methods=['delete'],
+        permission_classes=[IsReporterOrReadOnly]
+    )
     def delete_report(self, request, pk=None):
-        
         report = self.get_object()
-
         report.status = 'deleted'
         report.retention_expiry = timezone.now() + timedelta(days=7)
         report.save()
@@ -116,8 +116,11 @@ class ReportViewSet(viewsets.ModelViewSet):
             status=status.HTTP_202_ACCEPTED
         )
     
-    @action(detail=True, methods=['post'])
-    @permission_classes([permissions.IsAdminUser])
+    @action(
+        detail=True,
+        methods=['post'],
+        permission_classes=[permissions.IsAdminUser]
+    )
     def escalate(self, request, pk=None):
         report = self.get_object()
         report.status = 'escalated'

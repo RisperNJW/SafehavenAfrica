@@ -202,7 +202,8 @@ Planned Features
 •	Geo-location based emergency routing
 •	Offline mode for low-network regions
 •	Automatic safety alerts feature
-________________________________________
+____________________________________
+.donation to victims____
 🤝 Contributing
 We welcome contributions!
 To contribute:

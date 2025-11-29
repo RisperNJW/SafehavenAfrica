@@ -214,5 +214,5 @@ To contribute:
 ________________________________________
 📄 License
 This project is licensed under the MIT License.
-You are free to use, copy, and modify it with proper attribution.
+You are free to use, copy, and modify it with proper Attribution.
 
